@@ -136,7 +136,6 @@ void playsingle_controller::init_gui()
 	}
 
 	update_locker lock_display(gui_->video(), is_skipping_replay());
-	get_hotkey_command_executor()->set_button_state();
 }
 
 
@@ -502,12 +501,14 @@ void playsingle_controller::linger()
 	LOG_NG << "ending end-of-scenario linger\n";
 }
 
+#if 0
 void playsingle_controller::end_turn_enable(bool enable)
 {
-	gui_->enable_menu("endturn", enable);
-	get_hotkey_command_executor()->set_button_state();
+	//gui_->enable_menu("endturn", enable);
 }
-
+#else
+void playsingle_controller::end_turn_enable(bool) {}
+#endif
 
 void playsingle_controller::after_human_turn()
 {
@@ -560,8 +561,6 @@ void playsingle_controller::play_ai_turn()
 	}
 	turn_data_.sync_network();
 	gui_->recalculate_minimap();
-	gui_->invalidate_unit();
-	gui_->invalidate_game_status();
 }
 
 

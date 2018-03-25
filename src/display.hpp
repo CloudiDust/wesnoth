@@ -57,6 +57,7 @@ class manager;
 #include "font/standard_colors.hpp"
 #include "image.hpp" //only needed for enums (!)
 #include "key.hpp"
+#include "map/hex_rect.hpp"
 #include "overlay.hpp"
 #include "sdl/rect.hpp"
 #include "sdl/surface.hpp"
@@ -84,7 +85,6 @@ class display : public events::sdl_handler
 public:
 	display(const display_context* dc,
 			std::weak_ptr<wb::manager> wb,
-			reports& reports_object,
 			const config& theme_cfg,
 			const config& level,
 			bool auto_join = true);
@@ -298,10 +298,7 @@ public:
 	 * Returns the available area for a map, this may differ from the above.
 	 * This area will get the background area applied to it.
 	 */
-	const SDL_Rect& map_outside_area() const
-	{
-		return map_screenshot_ ? max_map_area() : theme_.main_map_location(video_.screen_area());
-	}
+	const SDL_Rect map_outside_area() const;
 
 	/** Check if the bbox of the hex at x,y has pixels outside the area rectangle. */
 	static bool outside_area(const SDL_Rect& area, const int x, const int y);
@@ -367,12 +364,6 @@ public:
 
 	virtual void highlight_hex(map_location hex);
 
-	/** Function to invalidate the game status displayed on the sidebar. */
-	void invalidate_game_status()
-	{
-		invalidateGameStatus_ = true;
-	}
-
 	/** Functions to get the on-screen positions of hexes. */
 	int get_location_x(const map_location& loc) const;
 	int get_location_y(const map_location& loc) const;
@@ -385,68 +376,11 @@ public:
 	 */
 	SDL_Point get_loc_drawing_origin(const map_location& loc) const;
 
-	/**
-	 * Rectangular area of hexes, allowing to decide how the top and bottom
-	 * edges handles the vertical shift for each parity of the x coordinate
-	 */
-	struct rect_of_hexes
-	{
-		int left;
-		int right;
-		int top[2]; // for even and odd values of x, respectively
-		int bottom[2];
-
-		/**  very simple iterator to walk into the rect_of_hexes */
-		struct iterator
-		{
-			iterator(const map_location& loc, const rect_of_hexes& rect)
-				: loc_(loc)
-				, rect_(rect)
-			{
-			}
-
-			/** increment y first, then when reaching bottom, increment x */
-			iterator& operator++();
-			bool operator==(const iterator& that) const
-			{
-				return that.loc_ == loc_;
-			}
-
-			bool operator!=(const iterator& that) const
-			{
-				return that.loc_ != loc_;
-			}
-
-			const map_location& operator*() const
-			{
-				return loc_;
-			}
-
-			typedef std::forward_iterator_tag iterator_category;
-			typedef map_location value_type;
-			typedef int difference_type;
-			typedef const map_location* pointer;
-			typedef const map_location& reference;
-
-		private:
-			map_location loc_;
-			const rect_of_hexes& rect_;
-		};
-
-		typedef iterator const_iterator;
-
-		iterator begin() const;
-		iterator end() const;
-	};
-
 	/** Return the rectangular area of hexes overlapped by r (r is in screen coordinates) */
 	const rect_of_hexes hexes_under_rect(const SDL_Rect& r) const;
 
 	/** Returns the rectangular area of visible hexes */
-	const rect_of_hexes get_visible_hexes() const
-	{
-		return hexes_under_rect(map_area());
-	}
+	const rect_of_hexes get_visible_hexes() const;
 
 	/** Returns true if location (x,y) is covered in shroud. */
 	bool shrouded(const map_location& loc) const;
@@ -502,18 +436,6 @@ public:
 	/** Capture a (map-)screenshot into a surface. */
 	surface screenshot(bool map_screenshot = false);
 
-	/** Adds a redraw observer, a function object to be called when redraw_everything is used */
-	void add_redraw_observer(std::function<void(display&)> f)
-	{
-		redraw_observers_.push_back(f);
-	}
-
-	/** Clear the redraw observers */
-	void clear_redraw_observers()
-	{
-		redraw_observers_.clear();
-	}
-
 	theme& get_theme()
 	{
 		return theme_;
@@ -533,8 +455,6 @@ public:
 	 */
 	std::shared_ptr<gui::button> find_action_button(const std::string& id);
 	std::shared_ptr<gui::button> find_menu_button(const std::string& id);
-
-	void refresh_report(const std::string& report_name, const config* new_cfg = nullptr);
 
 	void draw_minimap_units();
 
@@ -576,15 +496,6 @@ public:
 
 	/** Rebuild all dynamic terrain. */
 	void rebuild_all();
-
-	const theme::action* action_pressed();
-	const theme::menu* menu_pressed();
-
-	/**
-	 * Finds the menu which has a given item in it,
-	 * and enables or disables it.
-	 */
-	void enable_menu(const std::string& item, bool enable);
 
 	void set_diagnostic(const std::string& msg);
 
@@ -789,11 +700,6 @@ public:
 	/** Rebuild the flag list (not team colors) for a single side. */
 	void reinit_flags_for_side(std::size_t side);
 
-	void reset_reports(reports& reports_object)
-	{
-		reports_object_ = &reports_object;
-	}
-
 private:
 	void init_flags_for_side_internal(std::size_t side, const std::string& side_color);
 
@@ -837,14 +743,6 @@ protected:
 	 * No action here by default.
 	 */
 	virtual void post_draw()
-	{
-	}
-
-	/**
-	 * Called near the end of a draw operation, derived classes can use this
-	 * to render a specific sidebar. Very similar to post_commit.
-	 */
-	virtual void draw_sidebar()
 	{
 	}
 
@@ -960,12 +858,10 @@ protected:
 	 * Get the clipping rectangle for drawing.
 	 * Virtual since the editor might use a slightly different approach.
 	 */
-	virtual const SDL_Rect& get_clip_rect();
+	virtual const SDL_Rect get_clip_rect();
 
 	/** Draw the appropriate fog or shroud transition images for a specific hex. */
 	void draw_fog_shroud_transition_images(const map_location& loc, image::TYPE image_type);
-
-	void draw_image_for_report(surface& img, SDL_Rect& rect);
 
 	void scroll_to_xy(int screenxpos, int screenypos, SCROLL_TYPE scroll_type, bool force = true);
 
@@ -998,9 +894,7 @@ protected:
 	int diagnostic_label_;
 	double turbo_speed_;
 	bool turbo_;
-	bool invalidateGameStatus_;
 	const std::unique_ptr<map_labels> map_labels_;
-	reports* reports_object_;
 
 	/** Event raised when the map is being scrolled */
 	mutable events::generic_event scroll_event_;
@@ -1018,10 +912,6 @@ protected:
 	uint32_t last_frame_finished_ = 0u;
 
 	// Not set by the initializer:
-	std::map<std::string, SDL_Rect> reportRects_;
-	std::map<std::string, surface> reportSurfaces_;
-	std::map<std::string, config> reports_;
-	std::vector<std::shared_ptr<gui::button>> menu_buttons_, action_buttons_;
 	surface mouseover_hex_overlay_;
 	// If we're transitioning from one time of day to the next,
 	// then we will use these two masks on top of all hexes when we blit.
@@ -1075,8 +965,6 @@ private:
 
 	bool idle_anim_;
 	double idle_anim_rate_;
-
-	std::vector<std::function<void(display&)>> redraw_observers_;
 
 	/** Debug flag - overlay x,y coords on tiles */
 	bool draw_coordinates_;

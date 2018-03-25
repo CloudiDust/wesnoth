@@ -263,6 +263,7 @@ void controller_base::play_slice(bool is_delay_enabled)
 		l->update();
 	}
 
+#if 0
 	const theme::menu* const m = get_display().menu_pressed();
 	if(m != nullptr) {
 		const SDL_Rect& menu_loc = m->location(get_display().video().screen_area());
@@ -278,6 +279,7 @@ void controller_base::play_slice(bool is_delay_enabled)
 
 		return;
 	}
+#endif
 
 	auto str_vec = additional_actions_pressed();
 	if(!str_vec.empty()) {
@@ -351,7 +353,7 @@ void controller_base::show_menu(
 		const hotkey::hotkey_command& command = hotkey::get_hotkey_command(id);
 
 		if(cmd_exec->can_execute_command(command) && (!context_menu || in_context_menu(command.id))) {
-			items.emplace_back(config{"id", id});
+			items.emplace_back("id", id);
 		}
 	}
 

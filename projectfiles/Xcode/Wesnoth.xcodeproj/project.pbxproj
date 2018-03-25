@@ -109,6 +109,8 @@
 		469BDB56205C357500DBF748 /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 469BDB53205C357400DBF748 /* base64.cpp */; };
 		469EC8EC20287C4A008A0CAD /* surrender_quit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 469EC8EA20287C49008A0CAD /* surrender_quit.cpp */; };
 		46B2A7C12028DDA2006C2323 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EC5C243118EF07B4001FA499 /* libpng16.16.dylib */; };
+		46BAF785206672250004711F /* libboost_chrono-mt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 46BAF784206672240004711F /* libboost_chrono-mt.dylib */; };
+		46BAF787206672300004711F /* libboost_timer-mt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 46BAF786206672300004711F /* libboost_timer-mt.dylib */; };
 		46BED4D3205060EA00842FA5 /* crypt_blowfish.c in Sources */ = {isa = PBXBuildFile; fileRef = 46BED4D1205060EA00842FA5 /* crypt_blowfish.c */; };
 		46BED4D4205060EA00842FA5 /* crypt_blowfish.c in Sources */ = {isa = PBXBuildFile; fileRef = 46BED4D1205060EA00842FA5 /* crypt_blowfish.c */; };
 		46BED4D52050611600842FA5 /* crypt_blowfish.c in Sources */ = {isa = PBXBuildFile; fileRef = 46BED4D1205060EA00842FA5 /* crypt_blowfish.c */; };
@@ -814,9 +816,7 @@
 		91FBBAD81CB6BC3F00470BFE /* filesystem_sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FBBAD71CB6BC3F00470BFE /* filesystem_sdl.cpp */; };
 		91FBBADB1CB6D1B700470BFE /* markov_generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FBBAD91CB6D1B700470BFE /* markov_generator.cpp */; };
 		B504B94C1284C06B00261FE9 /* tips.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B504B94A1284C06B00261FE9 /* tips.cpp */; };
-		B508D13F10013BF900B12852 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B508D13E10013BF900B12852 /* Growl.framework */; };
 		B508D14B10013E4700B12852 /* Growl Registration Ticket.growlRegDict in Resources */ = {isa = PBXBuildFile; fileRef = B508D14A10013E4700B12852 /* Growl Registration Ticket.growlRegDict */; };
-		B508D15F10013F8100B12852 /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B508D13E10013BF900B12852 /* Growl.framework */; };
 		B508D193100146E300B12852 /* engine_fai.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B508D191100146E300B12852 /* engine_fai.cpp */; };
 		B508D1FB100155F300B12852 /* helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B508D1E7100155F300B12852 /* helper.cpp */; };
 		B508D2161001560100B12852 /* stacked_widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B508D2141001560100B12852 /* stacked_widget.cpp */; };
@@ -1372,7 +1372,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				905440871EE46ABC0091D1AE /* libcrypto.1.1.dylib in Copy Frameworks */,
-				B508D15F10013F8100B12852 /* Growl.framework in Copy Frameworks */,
 				91B622011B76C0A600B00E0F /* libboost_filesystem-mt.dylib in Copy Frameworks */,
 				91B622021B76C0A600B00E0F /* libboost_iostreams-mt.dylib in Copy Frameworks */,
 				91B622031B76C0A600B00E0F /* libboost_locale-mt.dylib in Copy Frameworks */,
@@ -1443,9 +1442,12 @@
 		469BDB54205C357500DBF748 /* base64.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = base64.hpp; sourceTree = "<group>"; };
 		469EC8EA20287C49008A0CAD /* surrender_quit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = surrender_quit.cpp; sourceTree = "<group>"; };
 		469EC8EB20287C49008A0CAD /* surrender_quit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = surrender_quit.hpp; sourceTree = "<group>"; };
+		46BAF784206672240004711F /* libboost_chrono-mt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_chrono-mt.dylib"; path = "lib/libboost_chrono-mt.dylib"; sourceTree = "<group>"; };
+		46BAF786206672300004711F /* libboost_timer-mt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_timer-mt.dylib"; path = "lib/libboost_timer-mt.dylib"; sourceTree = "<group>"; };
 		46BED4D0205060EA00842FA5 /* crypt_blowfish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt_blowfish.h; sourceTree = "<group>"; };
 		46BED4D1205060EA00842FA5 /* crypt_blowfish.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crypt_blowfish.c; sourceTree = "<group>"; };
 		46BED4D92050710800842FA5 /* scenario-story.cfg */ = {isa = PBXFileReference; lastKnownFileType = text; path = "scenario-story.cfg"; sourceTree = "<group>"; };
+		46D26D0920664716009B3418 /* hex_rect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = hex_rect.hpp; sourceTree = "<group>"; };
 		46DF5BCB1F46173700BE6D24 /* irdya_datetime.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = irdya_datetime.hpp; sourceTree = "<group>"; };
 		46DF5BCC1F46173700BE6D24 /* irdya_datetime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = irdya_datetime.cpp; sourceTree = "<group>"; };
 		46F5709D205FF856007031BF /* fs_commit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fs_commit.hpp; sourceTree = "<group>"; };
@@ -1849,7 +1851,6 @@
 		91FBBADA1CB6D1B700470BFE /* markov_generator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = markov_generator.hpp; sourceTree = "<group>"; };
 		B504B94A1284C06B00261FE9 /* tips.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tips.cpp; sourceTree = "<group>"; };
 		B504B94B1284C06B00261FE9 /* tips.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tips.hpp; sourceTree = "<group>"; };
-		B508D13E10013BF900B12852 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = lib/Growl.framework; sourceTree = "<group>"; };
 		B508D14A10013E4700B12852 /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "Resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		B508D191100146E300B12852 /* engine_fai.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = engine_fai.cpp; sourceTree = "<group>"; };
 		B508D192100146E300B12852 /* engine_fai.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = engine_fai.hpp; sourceTree = "<group>"; };
@@ -2742,7 +2743,6 @@
 				ECA9E7471CA20AA800A947D6 /* libreadline.7.0.dylib in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				F4D2A99614DAED0E00CAFF31 /* CoreFoundation.framework in Frameworks */,
-				B508D13F10013BF900B12852 /* Growl.framework in Frameworks */,
 				91B6221D1B76C0F400B00E0F /* libboost_filesystem-mt.dylib in Frameworks */,
 				91B6221E1B76C0F400B00E0F /* libboost_iostreams-mt.dylib in Frameworks */,
 				91B6221F1B76C0F400B00E0F /* libboost_locale-mt.dylib in Frameworks */,
@@ -2820,6 +2820,7 @@
 				91A215DC1CAD970800927AEA /* libboost_regex-mt.dylib in Frameworks */,
 				91A215DD1CAD971800927AEA /* libboost_locale-mt.dylib in Frameworks */,
 				91A215DE1CAD99E000927AEA /* libboost_filesystem-mt.dylib in Frameworks */,
+				46BAF785206672250004711F /* libboost_chrono-mt.dylib in Frameworks */,
 				91A215DF1CAD99E000927AEA /* libboost_iostreams-mt.dylib in Frameworks */,
 				91A215E01CAD99E000927AEA /* libboost_system-mt.dylib in Frameworks */,
 				91A215E11CAD99E000927AEA /* libboost_thread-mt.dylib in Frameworks */,
@@ -2827,6 +2828,7 @@
 				91A215E21CAD9B9000927AEA /* libpango-1.0.0.dylib in Frameworks */,
 				91A215E31CAD9B9000927AEA /* libpangocairo-1.0.0.dylib in Frameworks */,
 				916718EB1CADA88800B055A9 /* libgobject-2.0.0.dylib in Frameworks */,
+				46BAF787206672300004711F /* libboost_timer-mt.dylib in Frameworks */,
 				916719071CADAC0D00B055A9 /* libboost_random-mt.dylib in Frameworks */,
 				91C554691D77A545002DB0C8 /* libpcre.1.dylib in Frameworks */,
 			);
@@ -2873,7 +2875,7 @@
 		1058C7A2FEA54F0111CA2CBB /* Included Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B508D13E10013BF900B12852 /* Growl.framework */,
+				46BAF784206672240004711F /* libboost_chrono-mt.dylib */,
 				B55999220EC61F59008DD061 /* SDL2_image.framework */,
 				B55999240EC61F59008DD061 /* SDL2_mixer.framework */,
 				B5599E9B0EC68BF2008DD061 /* SDL2_ttf.framework */,
@@ -3205,6 +3207,7 @@
 				F4EF0D5313AD4E35003C701D /* libboost_regex-mt.dylib */,
 				F4EF0D5413AD4E35003C701D /* libboost_system-mt.dylib */,
 				F4EF0D5B13AD4E6D003C701D /* libboost_thread-mt.dylib */,
+				46BAF786206672300004711F /* libboost_timer-mt.dylib */,
 				91E355621CACA1CE00774252 /* libboost_unit_test_framework-mt.dylib */,
 				EC5C242218EF07B4001FA499 /* libbz2.1.0.dylib */,
 				B513B2270ED36BFB0006E551 /* libcairo.2.dylib */,
@@ -3779,6 +3782,7 @@
 			isa = PBXGroup;
 			children = (
 				B55999FC0EC62181008DD061 /* exception.hpp */,
+				46D26D0920664716009B3418 /* hex_rect.hpp */,
 				B55999FB0EC62181008DD061 /* label.cpp */,
 				B55999FA0EC62181008DD061 /* label.hpp */,
 				B55999F90EC62181008DD061 /* location.cpp */,
@@ -6328,7 +6332,7 @@
 				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/lib";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-Wall",
@@ -6379,7 +6383,7 @@
 				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/lib";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_CFLAGS = (
 					"-Wno-unused-local-typedefs",
 					"-Wno-unused-private-field",

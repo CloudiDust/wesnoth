@@ -1,4 +1,12 @@
 ## Version 1.15.0-dev
+ ### WML engine
+   * Support formula= key in [variable] ConditionalWML
+   * Support to_location in [move_unit], taking a location ID
+ ### Language and i18n
+   * Fixed many cases of interpolated strings in the engine possibly having
+     their translations retrieved from the wrong textdomain and falling back
+     to the English original if that failed (PR #2711, bug #2709).
+   * Updated translations: Spanish
 
 ## Version 1.13.12
  ### Security fixes

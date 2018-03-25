@@ -506,7 +506,6 @@ static void init_locale()
 	setlocale(LC_ALL, "English");
 #else
 	std::setlocale(LC_ALL, "C");
-	translation::init();
 #endif
 
 	const std::string& intl_dir = filesystem::get_intl_dir();
@@ -1025,8 +1024,8 @@ int main(int argc, char** argv)
 #endif
 {
 #ifdef _WIN32
-	(void)argc;
-	(void)argv;
+	UNUSED(argc);
+	UNUSED(argv);
 
 	// windows argv is ansi encoded by default
 	std::vector<std::string> args =
@@ -1112,9 +1111,6 @@ int main(int argc, char** argv)
 	terminate_handler.sa_handler = SIG_IGN;
 	sigaction(SIGCHLD, &terminate_handler, nullptr);
 #endif
-
-	// declare this here so that it will always be at the front of the event queue.
-	events::event_context global_context;
 
 	SDL_StartTextInput();
 

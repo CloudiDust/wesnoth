@@ -22,7 +22,7 @@ namespace editor {
 class editor_display : public display
 {
 public:
-	editor_display(editor_controller& controller, reports& reports_object, const config& theme_cfg);
+	editor_display(editor_controller& controller, const config& theme_cfg);
 
 	bool in_editor() const override { return true; }
 
@@ -51,8 +51,7 @@ protected:
 	virtual void draw_hex_cursor(const map_location& loc) override;
 	virtual void draw_hex_overlays() override;
 
-	const SDL_Rect& get_clip_rect() override;
-	void draw_sidebar() override;
+	const SDL_Rect get_clip_rect() override;
 
 	std::set<map_location> brush_locations_;
 

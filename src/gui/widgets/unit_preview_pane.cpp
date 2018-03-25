@@ -29,6 +29,7 @@
 #include "font/text_formatting.hpp"
 #include "formatter.hpp"
 #include "formula/string_utils.hpp"
+#include "language.hpp"
 #include "preferences/game.hpp"
 #include "gettext.hpp"
 #include "help/help.hpp"
@@ -222,7 +223,7 @@ void unit_preview_pane::print_attack_details(T attacks, tree_view_node& parent_n
 		add_name_tree_node(
 			subsection,
 			"item",
-			(formatter() << font::span_color(font::weapon_details_color) << a.range() << font::weapon_details_sep << a.type() << "</span>").str()
+			(formatter() << font::span_color(font::weapon_details_color) << string_table["range_" + a.range()] << font::weapon_details_sep << string_table["type_" + a.type()] << "</span>").str()
 		);
 
 		for(const auto& pair : a.special_tooltips()) {
@@ -261,7 +262,7 @@ void unit_preview_pane::set_displayed_type(const unit_type& type)
 	}
 
 	if(label_level_) {
-		std::string l_str = vgettext("Lvl $lvl", {{"lvl", std::to_string(type.level())}});
+		std::string l_str = VGETTEXT("Lvl $lvl", {{"lvl", std::to_string(type.level())}});
 
 		label_level_->set_label("<b>" + l_str + "</b>");
 		label_level_->set_use_markup(true);
@@ -291,7 +292,7 @@ void unit_preview_pane::set_displayed_type(const unit_type& type)
 
 		str << font::span_color(font::unit_type_color) << type.type_name() << "</span>" << "\n";
 
-		std::string l_str = vgettext("Lvl $lvl", {{"lvl", std::to_string(type.level())}});
+		std::string l_str = VGETTEXT("Lvl $lvl", {{"lvl", std::to_string(type.level())}});
 		str << l_str << "\n";
 
 		str << type.alignment() << "\n";
@@ -412,7 +413,7 @@ void unit_preview_pane::set_displayed_unit(const unit& u)
 	}
 
 	if(label_level_) {
-		std::string l_str = vgettext("Lvl $lvl", {{"lvl", std::to_string(u.level())}});
+		std::string l_str = VGETTEXT("Lvl $lvl", {{"lvl", std::to_string(u.level())}});
 
 		label_level_->set_label("<b>" + l_str + "</b>");
 		label_level_->set_use_markup(true);
@@ -443,10 +444,10 @@ void unit_preview_pane::set_displayed_unit(const unit& u)
 
 		str << font::span_color(font::unit_type_color) << u.type_name() << "</span>" << "\n";
 
-		std::string l_str = vgettext("Lvl $lvl", {{"lvl", std::to_string(u.level())}});
+		std::string l_str = VGETTEXT("Lvl $lvl", {{"lvl", std::to_string(u.level())}});
 		str << l_str << "\n";
 
-		str << u.alignment() << "\n";
+		str << unit_type::alignment_description(u.alignment(), u.gender()) << "\n";
 
 		str << utils::join(u.trait_names(), ", ") << "\n";
 

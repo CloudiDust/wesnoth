@@ -745,7 +745,7 @@ void preferences_dialog::post_build(window& window)
 
 	std::vector<config> hotkey_category_entries;
 	for(const auto& name : cat_names_) {
-		hotkey_category_entries.emplace_back(config {"label", name, "checkbox", false});
+		hotkey_category_entries.emplace_back("label", name, "checkbox", false);
 	}
 
 	multimenu_button& hotkey_menu = find_widget<multimenu_button>(&window, "hotkey_category_menu", false);
@@ -871,7 +871,7 @@ void preferences_dialog::add_hotkey_callback(listbox& hotkeys)
 	}
 
 	if(oldhk && oldhk->get_command() != "null") {
-		const std::string text = vgettext("“<b>$hotkey_sequence|</b>” is in use by “<b>$old_hotkey_action|</b>”.\nDo you wish to reassign it to “<b>$new_hotkey_action|</b>”?", {
+		const std::string text = VGETTEXT("“<b>$hotkey_sequence|</b>” is in use by “<b>$old_hotkey_action|</b>”.\nDo you wish to reassign it to “<b>$new_hotkey_action|</b>”?", {
 			{"hotkey_sequence",   oldhk->get_name()},
 			{"old_hotkey_action", hotkey::get_description(oldhk->get_command())},
 			{"new_hotkey_action", hotkey::get_description(newhk->get_command())}

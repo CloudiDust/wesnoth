@@ -32,6 +32,7 @@
 #include "units/helper.hpp"
 #include "recall_list_manager.hpp"
 #include "resources.hpp"
+#include "savegame.hpp"
 #include "scripting/game_lua_kernel.hpp"
 #include "formula/string_utils.hpp"
 #include "units/types.hpp"
@@ -389,11 +390,24 @@ namespace
 {
 	void debug_notification(const char* message)
 	{
-		utils::string_map symbols;
-		symbols["player"] = resources::controller->current_team().current_player();
-		display::announce_options announce_options;
-		announce_options.lifetime = 250;
-		display::get_singleton()->announce(vgettext(message, symbols), font::NORMAL_COLOR, announce_options);
+		auto& controller = *resources::controller;
+		auto& current_team = controller.current_team();
+		static bool ignore = false;
+		bool show_long_message = controller.is_replay() || !current_team.is_local();
+		
+		if(show_long_message && !ignore) {
+			play_controller::scoped_savegame_snapshot snapshot(controller);
+			std::stringstream sbuilder;
+			// TODO: improve message and mark translatable.
+			sbuilder << "The game detected the use of a debug command, maybe another player is cheating";
+			sbuilder << "\n\n" << "details:" << "\n\n" << VGETTEXT(message, {{"player", current_team.current_player()}});
+			savegame::oos_savegame save(controller.get_saved_game(), ignore);
+			save.save_game_interactive(sbuilder.str(), savegame::savegame::YES_NO); // can throw quit_game_exception
+		}
+		else {
+			display::announce_options announce_options;
+			display::get_singleton()->announce(VGETTEXT(message, {{"player", current_team.current_player()}}), font::NORMAL_COLOR, announce_options);
+		}
 	}
 }
 SYNCED_COMMAND_HANDLER_FUNCTION(debug_unit, child,  use_undo, /*show*/, /*error_handler*/)
@@ -456,8 +470,6 @@ SYNCED_COMMAND_HANDLER_FUNCTION(debug_unit, child,  use_undo, /*show*/, /*error_
 		assert(i.valid());
 	}
 
-	game_display::get_singleton()->invalidate_unit();
-
 	return true;
 }
 SYNCED_COMMAND_HANDLER_FUNCTION(debug_create_unit, child,  use_undo, /*show*/, error_handler)
@@ -488,7 +500,6 @@ SYNCED_COMMAND_HANDLER_FUNCTION(debug_create_unit, child,  use_undo, /*show*/, e
 	// Add the unit to the board.
 	std::tie(unit_it, std::ignore) = resources::gameboard->units().replace(loc, created);
 
-	game_display::get_singleton()->invalidate_unit();
 	resources::game_events->pump().fire("unit_placed", loc);
 	unit_display::unit_recruited(loc);
 

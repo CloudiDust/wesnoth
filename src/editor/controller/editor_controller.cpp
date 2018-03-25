@@ -67,7 +67,7 @@ editor_controller::editor_controller(const config &game_config)
 	, quit_confirmation(std::bind(&editor_controller::quit_confirm, this))
 	, active_menu_(editor::MAP)
 	, reports_(new reports())
-	, gui_(new editor_display(*this, *reports_, controller_base::get_theme(game_config, "editor")))
+	, gui_(new editor_display(*this, controller_base::get_theme(game_config, "editor")))
 	, tods_()
 	, context_manager_(new context_manager(*gui_.get(), game_config_))
 	, toolkit_(nullptr)
@@ -94,7 +94,7 @@ void editor_controller::init_gui()
 {
 	gui_->change_display_context(&get_current_map_context());
 	preferences::set_preference_display_settings();
-	gui_->add_redraw_observer(std::bind(&editor_controller::display_redraw_callback, this, _1));
+	//gui_->add_redraw_observer(std::bind(&editor_controller::display_redraw_callback, this, _1));
 	floating_label_manager_.reset(new font::floating_label_context());
 	gui().set_draw_coordinates(preferences::editor::draw_hex_coordinates());
 	gui().set_draw_terrain_codes(preferences::editor::draw_terrain_codes());
@@ -649,7 +649,7 @@ bool editor_controller::do_execute_command(const hotkey::hotkey_command& cmd, in
 					sound::play_music_once(music_tracks_[index].id());
 					get_current_map_context().add_to_playlist(music_tracks_[index]);
 					std::vector<config> items;
-					items.emplace_back(config {"id", "editor-playlist"});
+					items.emplace_back("id", "editor-playlist");
 					std::shared_ptr<gui::button> b = gui_->find_menu_button("menu-playlist");
 					show_menu(items, b->location().x +1, b->location().y + b->height() +1, false, *gui_);
 					return true;
@@ -1011,7 +1011,7 @@ void editor_controller::show_menu(const std::vector<config>& items_arg, int xloc
 		if((can_execute_command(command) && (!context_menu || in_context_menu(command.id)))
 			|| command.id == hotkey::HOTKEY_NULL)
 		{
-			items.emplace_back(config {"id", id});
+			items.emplace_back("id", id);
 		}
 	}
 
@@ -1226,7 +1226,6 @@ void editor_controller::refresh_image_cache()
 
 void editor_controller::display_redraw_callback(display&)
 {
-	set_button_state();
 	toolkit_->adjust_size();
 	toolkit_->get_palette_manager()->draw_contents();
 	get_current_map_context().get_labels().recalculate_labels();
@@ -1302,7 +1301,6 @@ bool editor_controller::left_click(int x, int y, const bool browse)
 	LOG_ED << "Left click action " << hex_clicked << "\n";
 	editor_action* a = get_mouse_action().click_left(*gui_, x, y);
 	perform_refresh_delete(a, true);
-	if (a) set_button_state();
 
 	return false;
 }
@@ -1317,7 +1315,6 @@ void editor_controller::left_mouse_up(int x, int y, const bool /*browse*/)
 {
 	editor_action* a = get_mouse_action().up_left(*gui_, x, y);
 	perform_delete(a);
-	if (a) set_button_state();
 	toolkit_->set_mouseover_overlay();
 	context_manager_->refresh_after_action();
 }
@@ -1332,7 +1329,6 @@ bool editor_controller::right_click(int x, int y, const bool browse)
 	LOG_ED << "Right click action " << hex_clicked << "\n";
 	editor_action* a = get_mouse_action().click_right(*gui_, x, y);
 	perform_refresh_delete(a, true);
-	if (a) set_button_state();
 	return false;
 }
 
@@ -1349,7 +1345,6 @@ void editor_controller::right_mouse_up(int x, int y, const bool browse)
 
 	editor_action* a = get_mouse_action().up_right(*gui_, x, y);
 	perform_delete(a);
-	if (a) set_button_state();
 	toolkit_->set_mouseover_overlay();
 	context_manager_->refresh_after_action();
 }
